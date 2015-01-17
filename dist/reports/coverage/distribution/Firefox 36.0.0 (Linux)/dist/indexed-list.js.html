@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for dist/indexed-list.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <link rel="stylesheet" href="../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header medium">
+    <h1>Code coverage report for <span class="entity">dist/indexed-list.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">52.73% <small>(116 / 220)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">19.77% <small>(17 / 86)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">45.35% <small>(39 / 86)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">92.31% <small>(12 / 13)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">dist/</a> &#187; indexed-list.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">22</span>
+<span class="cline-any cline-yes">48</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">37</span>
+<span class="cline-any cline-yes">33</span>
+<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">18</span>
+<span class="cline-any cline-yes">12</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*
+ Copyright (c) 2015, Ben Schulz
+ License: BSD 3-clause (http://opensource.org/licenses/BSD-3-Clause)
+*/
+function r(){var q,t;q=function(){return function(a){return a}(function(a,g,e,b){return{g:a,G:g,e:e,L:b}}(function(){<span class="fstat-no" title="function not covered" >function a(a,b){<span class="cstat-no" title="statement not covered" ></span>return a&amp;&amp;"function"===typeof a.valueOf&amp;&amp;b&amp;&amp;"function"===typeof b.valueOf?a.valueOf()&lt;=b.valueOf()?a.valueOf()&lt;b.valueOf()?-1:0:1:a&lt;=b?a&lt;b?-1:0:1}<span class="fstat-no" title="function not covered" ></span>function g(a,b){<span class="cstat-no" title="statement not covered" ></span>var g=a.length,n=Array(g),f=Array(g),h;<span class="cstat-no" title="statement not covered" >f</span>or(h=0;h&lt;g;++h)<span class="cstat-no" title="statement not covered" >n[h]=h,f[h]=a[h];<span class="cstat-no" title="statement not covered" >h</span></span>=a;<span class="cstat-no" title="statement not covered" >a</span>=f;<span class="cstat-no" title="statement not covered" >f</span>=h;<span class="cstat-no" title="statement not covered" >n</span>.sort(<span class="fstat-no" title="function not covered" >function(d,c){<span class="cstat-no" title="statement not covered" ></span>return b(a[d],a[c])||d-c}</span>);<span class="cstat-no" title="statement not covered" >f</span>or(h=0;h&lt;g;++h)<span class="cstat-no" title="statement not covered" >f[h]=a[n[h]];<span class="cstat-no" title="statement not covered" >r</span></span>eturn f}</span>return{contains:<span class="fstat-no" title="function not covered" >function(a,g){<span class="cstat-no" title="statement not covered" ></span>return 0&lt;=</span>
+a.indexOf(g)},D:<span class="fstat-no" title="function not covered" >function(a,g){<span class="cstat-no" title="statement not covered" ></span>return Array.prototype.concat.apply([],a.map(g))}</span>,j:function(e,b){var k=b||<span class="branch-1 cbranch-no" title="branch not covered" >a;</span>window.chrome?<span class="branch-0 cbranch-no" title="branch not covered" >k=g(e,k):</span>(e.sort(k),k=e);return k}}}(),function(){function a(a){return <span class="fstat-no" title="function not covered" >function(){<span class="cstat-no" title="statement not covered" ></span>return a}</span>}return{M:a(!0),C:a(!1),J:a(void 0),K:a(null),N:a(0),w:a,H:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return a}</span>}}(),function(){function a(a,e){return Object.prototype.hasOwnProperty.call(a,e)}return{v:<span class="fstat-no" title="function not covered" >function(a,e){<span class="cstat-no" title="statement not covered" ></span>return a===e||!(!a||"function"!==typeof a.valueOf||!e||"function"!==typeof e.valueOf||a.valueOf()!==e.valueOf())}</span>,
+extend:function(a){Array.prototype.slice.call(arguments,1).forEach(function(e){for(var b=Object.keys(e),k=0,n=b.length;k&lt;n;k++){var f=b[k],h=Object.getOwnPropertyDescriptor(e,f);void 0!==h&amp;&amp;h.enumerable&amp;&amp;Object.defineProperty(a,f,h)}});return a},F:<span class="fstat-no" title="function not covered" >function(g,e){<span class="cstat-no" title="statement not covered" ></span>for(var b in g)<span class="cstat-no" title="statement not covered" >a(g,b)&amp;&amp;e(b,g[b])}</span></span>,h:a}}(),{A:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return a.replace(/([A-Z])/g,<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return"-"+a.toLowerCase()}</span>)}</span>,B:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return a.replace(/-([a-z])/g,<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return a[1].toUpperCase()}</span>)}</span>,format:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>var g=arguments;</span>
+<span class="cstat-no" title="statement not covered" >return a.replace(/{(\d+)}/g,<span class="fstat-no" title="function not covered" >function(a,b){<span class="cstat-no" title="statement not covered" ></span>var k=parseInt(b,10)+1;<span class="cstat-no" title="statement not covered" >r</span>eturn typeof g.length&lt;=k?a:g[k]}</span>)}</span>}))}();t=function(a){return function(a){return a}(function(a){function e(e){var f={get length()<span class="fstat-no" title="function not covered" >{<span class="cstat-no" title="statement not covered" ></span>return this.length}</span>,contains:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return 0&lt;=this.l(a)}</span>,filter:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>for(var d=[],c=0;c&lt;this.length;++c){<span class="cstat-no" title="statement not covered" >var p=this.get(c);<span class="cstat-no" title="statement not covered" >a</span>(p,c,this)&amp;&amp;d.push(p)}<span class="cstat-no" title="statement not covered" ></span>r</span>eturn new b(d)}</span>,forEach:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>for(var d=0,c=this.length;d&lt;c;++d)<span class="cstat-no" title="statement not covered" >a(this.get(d),d,this)}</span></span>,get:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return this.get(a)}</span>,map:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>for(var d=</span>
+Array(this.length),c=0;c&lt;this.length;++c)<span class="cstat-no" title="statement not covered" >d[c]=a(this.get(c),c,this);<span class="cstat-no" title="statement not covered" >r</span>eturn new b(d)}</span>,readOnly:<span class="fstat-no" title="function not covered" >function(){<span class="cstat-no" title="statement not covered" ></span>return new k(this)}</span>,slice:<span class="fstat-no" title="function not covered" >function(a,d){<span class="cstat-no" title="statement not covered" ></span>var c=this.length;<span class="cstat-no" title="statement not covered" >a</span>=0&gt;=arguments.length?0:0&lt;=a?a:c+a;<span class="cstat-no" title="statement not covered" >d</span>=1&gt;=arguments.length?c:0&lt;=d?d:c+d;<span class="cstat-no" title="statement not covered" >f</span>or(var c=d-a,p=Array(c),m=0;m&lt;c;++m)<span class="cstat-no" title="statement not covered" >p[m]=this.get(a+m);<span class="cstat-no" title="statement not covered" >r</span></span>eturn new b(p)}</span>,k:<span class="fstat-no" title="function not covered" >function(){<span class="cstat-no" title="statement not covered" ></span>var a=Array(this.length);<span class="cstat-no" title="statement not covered" >t</span>his.forEach(<span class="fstat-no" title="function not covered" >function(d,c){<span class="cstat-no" title="statement not covered" ></span>a[c]=d}</span>);<span class="cstat-no" title="statement not covered" >r</span>eturn a}</span>,l:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>for(var d=0;d&lt;this.length;++d)<span class="cstat-no" title="statement not covered" >if(this.get(d)===a)<span class="cstat-no" title="statement not covered" >return d;<span class="cstat-no" title="statement not covered" >r</span></span></span>eturn-1}</span>};return a.e.extend(f,{get length()<span class="fstat-no" title="function not covered" >{<span class="cstat-no" title="statement not covered" ></span>return this.length}</span>,
+contains:f.contains,filter:f.filter,forEach:f.forEach,get:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return this.get(a)}</span>,map:f.map,readOnly:f.readOnly,slice:f.slice,toArray:f.k,tryFirstIndexOf:f.l},e)}<span class="fstat-no" title="function not covered" >function b(a){<span class="cstat-no" title="statement not covered" ></span>this.d=a}<span class="fstat-no" title="function not covered" ></span>function k(a){<span class="cstat-no" title="statement not covered" ></span>this.f=a}</span>b.prototype=e({get length()<span class="fstat-no" title="function not covered" >{<span class="cstat-no" title="statement not covered" ></span>return this.d.length}</span>,get:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return this.d[a]}</span>,k:<span class="fstat-no" title="function not covered" >function(){<span class="cstat-no" title="statement not covered" ></span>return this.d.slice()}</span>});k.prototype=e({get length()<span class="fstat-no" title="function not covered" >{<span class="cstat-no" title="statement not covered" ></span>return this.f.length}</span>,get:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return this.f.get(a)}</span>});return{I:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return new b(a||[])}</span>,r:e}}(a))}(q);return function(a){return a}(function(a){a.prototype.clear=
+a.prototype.clear;a.prototype.getById=a.prototype.p;a.prototype.containsById=a.prototype.n;a.prototype.defineOrdering=a.prototype.o;a.prototype.removeAllById=a.prototype.i;a.prototype.removeAll=a.prototype.s;a.prototype.updateAll=a.prototype.u;a.prototype.tryUpdateAll=a.prototype.t;a.prototype.addAll=a.prototype.m;a.prototype.insertAll=a.prototype.q;return a}(function(a,g){function e(a){<span class="missing-if-branch" title="if path not taken" >I</span>if("string"!==typeof a)<span class="cstat-no" title="statement not covered" >throw Error("Ids must be strings. (given: `"+a+"`, type: `"+typeof a+"`)");r</span>eturn a}function b(d,
+c){return a.e.h(d,e(c))?d[c]:<span class="branch-1 cbranch-no" title="branch not covered" >-1}</span>function k(a,c){var p=b(a,c);<span class="missing-if-branch" title="if path not taken" >I</span>if(0&gt;p)<span class="cstat-no" title="statement not covered" >throw Error("Es existiert kein Eintrag mit Id '"+c+"'.");r</span>eturn p}function n(a,c,b,m,l){<span class="missing-if-branch" title="else path not taken" >E</span>if(m&gt;=l)return m;<span class="cstat-no" title="statement not covered" >var e=Math.floor((m+l)/2);<span class="cstat-no" title="statement not covered" >r</span>eturn 0&gt;c(b,a[e])?n(a,c,b,m,e):n(a,c,b,e+1,l)}</span>function f(a,c,b,e,l){function u(e,l){var m=g.length,f=c.slice(e,l);g=g.concat(f);f.forEach(<span class="fstat-no" title="function not covered" >function(c){<span class="cstat-no" title="statement not covered" ></span>b[a(c)]=m;<span class="cstat-no" title="statement not covered" >+</span>+m}</span>)}var g=[],f=0;e.forEach(function(a){u(f,a);f=a;l(g)});u(f,c.length);return g}function h(a){this.b=function(c){return e(a(c))};this.elements=
+[];this.a={};this.c=null}h.prototype=g.r({get length(){return this.elements.length},get:function(a){return this.elements[a]},p:function(a){a=k(this.a,a);return this.elements[a]},clear:function(){this.elements=[];this.a={}},contains:function(a){a=(0,this.b)(a);return 0&lt;=b(this.a,a)},n:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return 0&lt;=b(this.a,a)}</span>,o:function(d){var c=this.b,b=this.elements,e=this.a;this.c=d;a.g.j(b,d);d=!1;for(var l=0;l&lt;b.length;++l){<span class="cstat-no" title="statement not covered" >var f=c(b[l]);<span class="cstat-no" title="statement not covered" >d</span>=d||e[f]!==l;<span class="cstat-no" title="statement not covered" >e</span>[f]=l}</span>return d},i:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>if(a.length){<span class="cstat-no" title="statement not covered" >var c=</span></span>
+this.b,b=this.elements,e=this.a;<span class="cstat-no" title="statement not covered" >a=a.map(<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>return k(e,a)+1}</span>);<span class="cstat-no" title="statement not covered" >a</span>.sort(<span class="fstat-no" title="function not covered" >function(a,c){<span class="cstat-no" title="statement not covered" ></span>return a-c}</span>);<span class="cstat-no" title="statement not covered" >t</span>his.elements=f(c,b,e,a,<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>a=a.pop();<span class="cstat-no" title="statement not covered" >a</span>=c(a);<span class="cstat-no" title="statement not covered" >d</span>elete e[a]}</span>)}</span>},s:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>this.i(a.map(this.b))}</span>,u:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>if(this.c)<span class="cstat-no" title="statement not covered" >throw Error("`updateAll` must not be called on an ordered `IndexedTable`. Use a combination of order-preserving `tryUpdateAll`, `removeAll` and `insertAll` instead.");<span class="cstat-no" title="statement not covered" >i</span></span>f(a.length){<span class="cstat-no" title="statement not covered" >var c=this.b,b=this.elements,e=this.a;<span class="cstat-no" title="statement not covered" >a</span>.forEach(<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>var d=k(e,c(a));<span class="cstat-no" title="statement not covered" >b</span>[d]=a}</span>)}</span>}</span>,
+t:<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>if(!this.c)<span class="cstat-no" title="statement not covered" >throw Error("`tryUpdateAll` is designed for ordered `IndexedTable`s. For unordered ones, use `updateAll` instead.");<span class="cstat-no" title="statement not covered" >i</span></span>f(!a.length)<span class="cstat-no" title="statement not covered" >return[];<span class="cstat-no" title="statement not covered" >v</span></span>ar c=this.b,b=this.elements,e=this.a,f=this.c,g=[];<span class="cstat-no" title="statement not covered" >a</span>.forEach(<span class="fstat-no" title="function not covered" >function(a){<span class="cstat-no" title="statement not covered" ></span>var d=k(e,c(a));<span class="cstat-no" title="statement not covered" >0</span>!==f(a,b[d])?g.push(a):b[d]=a}</span>);<span class="cstat-no" title="statement not covered" >r</span>eturn g}</span>,m:function(d){<span class="missing-if-branch" title="if path not taken" >I</span>if(this.c)<span class="cstat-no" title="statement not covered" >throw Error("`addAll` must not be called on an ordered `IndexedTable`. Use order-preserving `insertAll` instead.");<span class="missing-if-branch" title="else path not taken" >E</span>i</span>f(d.length){var c=this.b,b=this.elements,e=this.a;d.forEach(function(d){var f=
+c(d);<span class="missing-if-branch" title="if path not taken" >I</span>if(a.e.h(e,f))<span class="cstat-no" title="statement not covered" >throw Error("The list already contains an element with id `"+f+"`. Did you mean to call `updateAll`?.");e</span>[f]=b.push(d)-1})}},q:function(d){<span class="missing-if-branch" title="if path not taken" >I</span>if(!this.c)<span class="cstat-no" title="statement not covered" >throw Error("`insertAll` is designed for ordered `IndexedTable`s. For unordered ones, use `addAll` instead.");<span class="missing-if-branch" title="else path not taken" >E</span>i</span>f(d.length){var c=this.b,b=this.elements,e=this.a,g=this.c;a.g.j(d,g);var h=0,k=[];d.forEach(function(a){a=n(b,g,a,h,b.length);k.push(a);h=a});h=0;this.elements=f(c,b,e,k,function(a){var b=d[h],f=c(b),g=a.length;a.push(b);
+e[f]=g;++h})}}});return h}(q,t)))}"function"===typeof define&amp;&amp;define.amd?define([],r):<span class="branch-1 cbranch-no" title="branch not covered" >window["indexed-list"]=r();</span>
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Mar 12 2015 18:31:50 GMT+0100 (CET)</div>
+</div>
+
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+
+<script src="../sorter.js"></script>
+</body>
+</html>

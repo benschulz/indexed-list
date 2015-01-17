@@ -1,0 +1,1 @@
+A mutable list which keeps a string based index of element positions.
