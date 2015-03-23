@@ -7,12 +7,12 @@ define(['indexed-list'], function (IndexedList) {
 
     var identityId = toString(function (x) { return x; });
 
-    describe('Ordered `IndexedList` tests:', function () {
-        describe('After calling `insertAll([2, 3, 1])` on a brand new, naturally ordered list', function () {
+    describe('Sorted `IndexedList` tests:', function () {
+        describe('After calling `insertAll([2, 3, 1])` on a brand new, naturally sorted list', function () {
             function declare(description, assertion) {
                 it(description, function () {
                     var list = new IndexedList(identityId);
-                    list.defineOrdering(function (a, b) { return a - b; });
+                    list.sortBy(function (a, b) { return a - b; });
 
                     list.insertAll([2, 3, 1]);
 

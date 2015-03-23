@@ -21,14 +21,14 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
         return index;
     }
 
-    function findInsertionIndex(elements, ordering, element, fromIndex, toIndex) {
+    function findInsertionIndex(elements, comparator, element, fromIndex, toIndex) {
         if (fromIndex >= toIndex)
             return fromIndex;
 
         var middle = Math.floor((fromIndex + toIndex) / 2);
-        return ordering(element, elements[middle]) < 0
-            ? findInsertionIndex(elements, ordering, element, fromIndex, middle)
-            : findInsertionIndex(elements, ordering, element, middle + 1, toIndex);
+        return comparator(element, elements[middle]) < 0
+            ? findInsertionIndex(elements, comparator, element, fromIndex, middle)
+            : findInsertionIndex(elements, comparator, element, middle + 1, toIndex);
     }
 
     function reconstructElements(idSelector, originalElements, elementIdToIndex, indizes, inbetween) {
@@ -57,37 +57,57 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
 
     function IndexedList(idSelector) {
         this.idSelector = element => checkId(idSelector(element));
-        this.elements = [];
-        this.elementIdToIndex = {};
-        this.ordering = null;
+        this.__elements = [];
+        this.__elementIdToIndex = {};
+        this.__comparator = null;
     }
 
     IndexedList.prototype = lists.listPrototype({
-        get length() { return this.elements.length; },
-        get: function (index) { return this.elements[index]; },
+        get length() { return this.__elements.length; },
+        get: function (index) { return this.__elements[index]; },
 
         getById: function (id) {
-            var index = indexOfById(this.elementIdToIndex, id);
-            return this.elements[index];
+            var index = indexOfById(this.__elementIdToIndex, id);
+            return this.__elements[index];
         },
         clear: function () {
-            this.elements = [];
-            this.elementIdToIndex = {};
+            this.__elements = [];
+            this.__elementIdToIndex = {};
         },
         contains: function (element) {
             var id = idOf(this.idSelector, element);
-            return tryIndexOfById(this.elementIdToIndex, id) >= 0;
+            return tryIndexOfById(this.__elementIdToIndex, id) >= 0;
         },
         containsById: function (id) {
-            return tryIndexOfById(this.elementIdToIndex, id) >= 0;
+            return tryIndexOfById(this.__elementIdToIndex, id) >= 0;
         },
-        defineOrdering: function (ordering) {
-            var idSelector = this.idSelector;
-            var elements = this.elements;
-            var elementIdToIndex = this.elementIdToIndex;
+        removeAllById: function (ids) {
+            if (!ids.length)
+                return;
 
-            this.ordering = ordering;
-            js.arrays.stableSort(elements, ordering);
+            var idSelector = this.idSelector;
+            var elements = this.__elements;
+            var elementIdToIndex = this.__elementIdToIndex;
+
+            var indicesOffsetBy1 = ids.map(id => indexOfById(elementIdToIndex, id) + 1);
+            indicesOffsetBy1.sort((a, b) => a - b);
+
+            this.__elements = reconstructElements(idSelector, elements, elementIdToIndex, indicesOffsetBy1, function (newArray) {
+                var row = newArray.pop();
+                var id = idSelector(row);
+                delete elementIdToIndex[id];
+            });
+        },
+        removeAll: function (elements) {
+            this.removeAllById(elements.map(this.idSelector));
+        },
+        sortBy: function (comparator) {
+            var idSelector = this.idSelector;
+            var elements = this.__elements;
+            var elementIdToIndex = this.__elementIdToIndex;
+
+            this.__comparator = comparator;
+            js.arrays.stableSort(elements, comparator);
 
             var reordered = false;
             for (var i = 0; i < elements.length; ++i) {
@@ -97,36 +117,16 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
             }
             return reordered;
         },
-        removeAllById: function (ids) {
-            if (!ids.length)
-                return;
-
-            var idSelector = this.idSelector;
-            var elements = this.elements;
-            var elementIdToIndex = this.elementIdToIndex;
-
-            var indicesOffsetBy1 = ids.map(id => indexOfById(elementIdToIndex, id) + 1);
-            indicesOffsetBy1.sort((a, b) => a - b);
-
-            this.elements = reconstructElements(idSelector, elements, elementIdToIndex, indicesOffsetBy1, function (newArray) {
-                var row = newArray.pop();
-                var id = idSelector(row);
-                delete elementIdToIndex[id];
-            });
-        },
-        removeAll: function (elements) {
-            this.removeAllById(elements.map(this.idSelector));
-        },
         updateAll: function (updatedElements) {
-            if (this.ordering)
-                throw new Error('`updateAll` must not be called on an ordered `IndexedTable`. Use a combination of order-preserving' +
+            if (this.__comparator)
+                throw new Error('`updateAll` must not be called on a sorted `IndexedTable`. Use a combination of order-preserving' +
                 ' `tryUpdateAll`, `removeAll` and `insertAll` instead.');
             if (!updatedElements.length)
                 return;
 
             var idSelector = this.idSelector;
-            var elements = this.elements;
-            var elementIdToIndex = this.elementIdToIndex;
+            var elements = this.__elements;
+            var elementIdToIndex = this.__elementIdToIndex;
 
             updatedElements.forEach(function (element) {
                 var index = indexOfById(elementIdToIndex, idSelector(element));
@@ -134,22 +134,22 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
             });
         },
         tryUpdateAll: function (updatedElements) {
-            if (!this.ordering)
-                throw new Error('`tryUpdateAll` is designed for ordered `IndexedTable`s. For unordered ones, use `updateAll` instead.');
+            if (!this.__comparator)
+                throw new Error('`tryUpdateAll` is designed for sorted `IndexedTable`s. For unsorted ones, use `updateAll` instead.');
             if (!updatedElements.length)
                 return [];
 
             var idSelector = this.idSelector;
-            var elements = this.elements;
-            var elementIdToIndex = this.elementIdToIndex;
-            var ordering = this.ordering;
+            var elements = this.__elements;
+            var elementIdToIndex = this.__elementIdToIndex;
+            var comparator = this.__comparator;
 
             var failed = [];
             updatedElements.forEach(function (row) {
                 var index = indexOfById(elementIdToIndex, idSelector(row));
                 // TODO the below check is good (quick and easy), but when it fails we should check if the
                 //      updated element is still greater/less than the one before/after before failing it
-                if (ordering(row, elements[index]) !== 0)
+                if (comparator(row, elements[index]) !== 0)
                     failed.push(row);
                 else
                     elements[index] = row;
@@ -157,14 +157,14 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
             return failed;
         },
         addAll: function (newElements) {
-            if (this.ordering)
-                throw new Error('`addAll` must not be called on an ordered `IndexedTable`. Use order-preserving `insertAll` instead.');
+            if (this.__comparator)
+                throw new Error('`addAll` must not be called on an sorted `IndexedTable`. Use order-preserving `insertAll` instead.');
             if (!newElements.length)
                 return;
 
             var idSelector = this.idSelector;
-            var elements = this.elements;
-            var elementIdToIndex = this.elementIdToIndex;
+            var elements = this.__elements;
+            var elementIdToIndex = this.__elementIdToIndex;
 
             newElements.forEach(function (row) {
                 var id = idSelector(row);
@@ -174,28 +174,28 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
             });
         },
         insertAll: function (newElements) {
-            if (!this.ordering)
-                throw new Error('`insertAll` is designed for ordered `IndexedTable`s. For unordered ones, use `addAll` instead.');
+            if (!this.__comparator)
+                throw new Error('`insertAll` is designed for sorted `IndexedTable`s. For unsorted ones, use `addAll` instead.');
             if (!newElements.length)
                 return;
 
             var idSelector = this.idSelector;
-            var elements = this.elements;
-            var elementIdToIndex = this.elementIdToIndex;
-            var ordering = this.ordering;
+            var elements = this.__elements;
+            var elementIdToIndex = this.__elementIdToIndex;
+            var comparator = this.__comparator;
 
-            js.arrays.stableSort(newElements, ordering);
+            js.arrays.stableSort(newElements, comparator);
 
             var offset = 0;
             var indices = [];
             newElements.forEach(function (newElement) {
-                var insertionIndex = findInsertionIndex(elements, ordering, newElement, offset, elements.length);
+                var insertionIndex = findInsertionIndex(elements, comparator, newElement, offset, elements.length);
                 indices.push(insertionIndex);
                 offset = insertionIndex;
             });
 
             offset = 0;
-            this.elements = reconstructElements(idSelector, elements, elementIdToIndex, indices, function (newArray) {
+            this.__elements = reconstructElements(idSelector, elements, elementIdToIndex, indices, function (newArray) {
                 var row = newElements[offset];
                 var id = idSelector(row);
                 var index = newArray.length;
