@@ -81,6 +81,9 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
         containsById: function (id) {
             return tryIndexOfById(this.__elementIdToIndex, id) >= 0;
         },
+        removeAll: function (elements) {
+            this.removeAllById(elements.map(this.idSelector));
+        },
         removeAllById: function (ids) {
             if (!ids.length)
                 return;
@@ -97,9 +100,6 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
                 var id = idSelector(row);
                 delete elementIdToIndex[id];
             });
-        },
-        removeAll: function (elements) {
-            this.removeAllById(elements.map(this.idSelector));
         },
         sortBy: function (comparator) {
             var idSelector = this.idSelector;
@@ -145,14 +145,14 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
             var comparator = this.__comparator;
 
             var failed = [];
-            updatedElements.forEach(function (row) {
-                var index = indexOfById(elementIdToIndex, idSelector(row));
+            updatedElements.forEach(function (updatedElement) {
+                var index = indexOfById(elementIdToIndex, idSelector(updatedElement));
                 // TODO the below check is good (quick and easy), but when it fails we should check if the
                 //      updated element is still greater/less than the one before/after before failing it
-                if (comparator(row, elements[index]) !== 0)
-                    failed.push(row);
+                if (comparator(updatedElement, elements[index]) !== 0)
+                    failed.push(updatedElement);
                 else
-                    elements[index] = row;
+                    elements[index] = updatedElement;
             });
             return failed;
         },
