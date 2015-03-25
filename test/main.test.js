@@ -5,7 +5,7 @@ require(['require', 'chai'], function (require, chai) {
 
     window.expect = chai.expect;
 
-    require(['basic', 'sorted'], function () {
+    require(['basic.test', 'sorted.test'], function () {
         window.__karma__.start();
     });
 
