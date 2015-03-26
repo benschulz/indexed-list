@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright (c) 2015, Ben Schulz
  * License: BSD 3-clause (http://opensource.org/licenses/BSD-3-Clause)
  */
@@ -24,11 +24,11 @@ indexed_list_indexed_list = function (js, lists) {
       throw new Error('Es existiert kein Eintrag mit Id \'' + id + '\'.');
     return index;
   }
-  function findInsertionIndex(elements, ordering, element, fromIndex, toIndex) {
+  function findInsertionIndex(elements, comparator, element, fromIndex, toIndex) {
     if (fromIndex >= toIndex)
       return fromIndex;
     var middle = Math.floor((fromIndex + toIndex) / 2);
-    return ordering(element, elements[middle]) < 0 ? findInsertionIndex(elements, ordering, element, fromIndex, middle) : findInsertionIndex(elements, ordering, element, middle + 1, toIndex);
+    return comparator(element, elements[middle]) < 0 ? findInsertionIndex(elements, comparator, element, fromIndex, middle) : findInsertionIndex(elements, comparator, element, middle + 1, toIndex);
   }
   function reconstructElements(idSelector, originalElements, elementIdToIndex, indizes, inbetween) {
     var reconstructedElements = [];
@@ -54,38 +54,59 @@ indexed_list_indexed_list = function (js, lists) {
     this.idSelector = function (element) {
       return checkId(idSelector(element));
     };
-    this.elements = [];
-    this.elementIdToIndex = {};
-    this.ordering = null;
+    this.__elements = [];
+    this.__elementIdToIndex = {};
+    this.__comparator = null;
   }
   IndexedList.prototype = lists.listPrototype({
     get length() {
-      return this.elements.length;
+      return this.__elements.length;
     },
     get: function (index) {
-      return this.elements[index];
+      return this.__elements[index];
     },
     getById: function (id) {
-      var index = indexOfById(this.elementIdToIndex, id);
-      return this.elements[index];
+      var index = indexOfById(this.__elementIdToIndex, id);
+      return this.__elements[index];
     },
     clear: function () {
-      this.elements = [];
-      this.elementIdToIndex = {};
+      this.__elements = [];
+      this.__elementIdToIndex = {};
     },
     contains: function (element) {
       var id = idOf(this.idSelector, element);
-      return tryIndexOfById(this.elementIdToIndex, id) >= 0;
+      return tryIndexOfById(this.__elementIdToIndex, id) >= 0;
     },
     containsById: function (id) {
-      return tryIndexOfById(this.elementIdToIndex, id) >= 0;
+      return tryIndexOfById(this.__elementIdToIndex, id) >= 0;
     },
-    defineOrdering: function (ordering) {
+    removeAll: function (elements) {
+      this.removeAllById(elements.map(this.idSelector));
+    },
+    removeAllById: function (ids) {
+      if (!ids.length)
+        return;
       var idSelector = this.idSelector;
-      var elements = this.elements;
-      var elementIdToIndex = this.elementIdToIndex;
-      this.ordering = ordering;
-      js.arrays.stableSort(elements, ordering);
+      var elements = this.__elements;
+      var elementIdToIndex = this.__elementIdToIndex;
+      var indicesOffsetBy1 = ids.map(function (id) {
+        return indexOfById(elementIdToIndex, id) + 1;
+      });
+      indicesOffsetBy1.sort(function (a, b) {
+        return a - b;
+      });
+      this.__elements = reconstructElements(idSelector, elements, elementIdToIndex, indicesOffsetBy1, function (newArray) {
+        var row = newArray.pop();
+        var id = idSelector(row);
+        delete elementIdToIndex[id];
+      });
+    },
+    sortBy: function (comparator) {
+      var idSelector = this.idSelector;
+      var elements = this.__elements;
+      var elementIdToIndex = this.__elementIdToIndex;
+      this.__comparator = comparator;
+      js.arrays.stableSort(elements, comparator);
       var reordered = false;
       for (var i = 0; i < elements.length; ++i) {
         var id = idSelector(elements[i]);
@@ -94,69 +115,48 @@ indexed_list_indexed_list = function (js, lists) {
       }
       return reordered;
     },
-    removeAllById: function (ids) {
-      if (!ids.length)
-        return;
-      var idSelector = this.idSelector;
-      var elements = this.elements;
-      var elementIdToIndex = this.elementIdToIndex;
-      var indicesOffsetBy1 = ids.map(function (id) {
-        return indexOfById(elementIdToIndex, id) + 1;
-      });
-      indicesOffsetBy1.sort(function (a, b) {
-        return a - b;
-      });
-      this.elements = reconstructElements(idSelector, elements, elementIdToIndex, indicesOffsetBy1, function (newArray) {
-        var row = newArray.pop();
-        var id = idSelector(row);
-        delete elementIdToIndex[id];
-      });
-    },
-    removeAll: function (elements) {
-      this.removeAllById(elements.map(this.idSelector));
-    },
     updateAll: function (updatedElements) {
-      if (this.ordering)
-        throw new Error('`updateAll` must not be called on an ordered `IndexedTable`. Use a combination of order-preserving' + ' `tryUpdateAll`, `removeAll` and `insertAll` instead.');
+      if (this.__comparator)
+        throw new Error('`updateAll` must not be called on a sorted `IndexedTable`. Use a combination of order-preserving' + ' `tryUpdateAll`, `removeAll` and `insertAll` instead.');
       if (!updatedElements.length)
         return;
       var idSelector = this.idSelector;
-      var elements = this.elements;
-      var elementIdToIndex = this.elementIdToIndex;
+      var elements = this.__elements;
+      var elementIdToIndex = this.__elementIdToIndex;
       updatedElements.forEach(function (element) {
         var index = indexOfById(elementIdToIndex, idSelector(element));
         elements[index] = element;
       });
     },
     tryUpdateAll: function (updatedElements) {
-      if (!this.ordering)
-        throw new Error('`tryUpdateAll` is designed for ordered `IndexedTable`s. For unordered ones, use `updateAll` instead.');
+      if (!this.__comparator)
+        throw new Error('`tryUpdateAll` is designed for sorted `IndexedTable`s. For unsorted ones, use `updateAll` instead.');
       if (!updatedElements.length)
         return [];
       var idSelector = this.idSelector;
-      var elements = this.elements;
-      var elementIdToIndex = this.elementIdToIndex;
-      var ordering = this.ordering;
+      var elements = this.__elements;
+      var elementIdToIndex = this.__elementIdToIndex;
+      var comparator = this.__comparator;
       var failed = [];
-      updatedElements.forEach(function (row) {
-        var index = indexOfById(elementIdToIndex, idSelector(row));
+      updatedElements.forEach(function (updatedElement) {
+        var index = indexOfById(elementIdToIndex, idSelector(updatedElement));
         // TODO the below check is good (quick and easy), but when it fails we should check if the
         //      updated element is still greater/less than the one before/after before failing it
-        if (ordering(row, elements[index]) !== 0)
-          failed.push(row);
+        if (comparator(updatedElement, elements[index]) !== 0)
+          failed.push(updatedElement);
         else
-          elements[index] = row;
+          elements[index] = updatedElement;
       });
       return failed;
     },
     addAll: function (newElements) {
-      if (this.ordering)
-        throw new Error('`addAll` must not be called on an ordered `IndexedTable`. Use order-preserving `insertAll` instead.');
+      if (this.__comparator)
+        throw new Error('`addAll` must not be called on an sorted `IndexedTable`. Use order-preserving `insertAll` instead.');
       if (!newElements.length)
         return;
       var idSelector = this.idSelector;
-      var elements = this.elements;
-      var elementIdToIndex = this.elementIdToIndex;
+      var elements = this.__elements;
+      var elementIdToIndex = this.__elementIdToIndex;
       newElements.forEach(function (row) {
         var id = idSelector(row);
         if (js.objects.hasOwn(elementIdToIndex, id))
@@ -165,24 +165,24 @@ indexed_list_indexed_list = function (js, lists) {
       });
     },
     insertAll: function (newElements) {
-      if (!this.ordering)
-        throw new Error('`insertAll` is designed for ordered `IndexedTable`s. For unordered ones, use `addAll` instead.');
+      if (!this.__comparator)
+        throw new Error('`insertAll` is designed for sorted `IndexedTable`s. For unsorted ones, use `addAll` instead.');
       if (!newElements.length)
         return;
       var idSelector = this.idSelector;
-      var elements = this.elements;
-      var elementIdToIndex = this.elementIdToIndex;
-      var ordering = this.ordering;
-      js.arrays.stableSort(newElements, ordering);
+      var elements = this.__elements;
+      var elementIdToIndex = this.__elementIdToIndex;
+      var comparator = this.__comparator;
+      js.arrays.stableSort(newElements, comparator);
       var offset = 0;
       var indices = [];
       newElements.forEach(function (newElement) {
-        var insertionIndex = findInsertionIndex(elements, ordering, newElement, offset, elements.length);
+        var insertionIndex = findInsertionIndex(elements, comparator, newElement, offset, elements.length);
         indices.push(insertionIndex);
         offset = insertionIndex;
       });
       offset = 0;
-      this.elements = reconstructElements(idSelector, elements, elementIdToIndex, indices, function (newArray) {
+      this.__elements = reconstructElements(idSelector, elements, elementIdToIndex, indices, function (newArray) {
         var row = newElements[offset];
         var id = idSelector(row);
         var index = newArray.length;
