@@ -17,7 +17,8 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
 
     function indexOfById(elementIdToIndex, id) {
         var index = tryIndexOfById(elementIdToIndex, id);
-        if (index < 0) throw new Error('Es existiert kein Eintrag mit Id \'' + id + '\'.');
+        if (index < 0)
+            throw new Error('No entry with Id `' + id + '`.');
         return index;
     }
 
