@@ -14,7 +14,7 @@
  */
 var onefold_js, onefold_lists, indexed_list_indexed_list, indexed_list_exported, indexed_list;
 onefold_js = function () {
-  var onefold_js_objects, onefold_js_arrays, onefold_js_functions, onefold_js_strings, onefold_js_internal, onefold_js;
+  var onefold_js_objects, onefold_js_arrays, onefold_js_strings, onefold_js_internal, onefold_js;
   onefold_js_objects = function () {
     return {
       areEqual: areEqual,
@@ -175,25 +175,6 @@ onefold_js = function () {
       return destination;
     }
   }(onefold_js_objects);
-  onefold_js_functions = function () {
-    var constant = function (x) {
-      return function () {
-        return x;
-      };
-    };
-    return {
-      // TODO with arrow functions these can go away
-      true: constant(true),
-      false: constant(false),
-      nop: constant(undefined),
-      null: constant(null),
-      zero: constant(0),
-      constant: constant,
-      identity: function (x) {
-        return x;
-      }
-    };
-  }();
   onefold_js_strings = {
     convertCamelToHyphenCase: function (camelCased) {
       return camelCased.replace(/([A-Z])/g, function (match) {
@@ -213,14 +194,13 @@ onefold_js = function () {
       });
     }
   };
-  onefold_js_internal = function (arrays, functions, objects, strings) {
+  onefold_js_internal = function (arrays, objects, strings) {
     return {
       arrays: arrays,
-      functions: functions,
       objects: objects,
       strings: strings
     };
-  }(onefold_js_arrays, onefold_js_functions, onefold_js_objects, onefold_js_strings);
+  }(onefold_js_arrays, onefold_js_objects, onefold_js_strings);
   onefold_js = function (main) {
     return main;
   }(onefold_js_internal);
@@ -383,7 +363,7 @@ indexed_list_indexed_list = function (js, lists) {
   function indexOfById(elementIdToIndex, id) {
     var index = tryIndexOfById(elementIdToIndex, id);
     if (index < 0)
-      throw new Error('No entry with Id `' + id + '`.');
+      throw new Error('No element with id `' + id + '`.');
     return index;
   }
   function findInsertionIndex(elements, comparator, element, fromIndex, toIndex) {
@@ -428,8 +408,11 @@ indexed_list_indexed_list = function (js, lists) {
       return this.__elements[index];
     },
     getById: function (id) {
-      var index = indexOfById(this.__elementIdToIndex, id);
-      return this.__elements[index];
+      return this.__elements[indexOfById(this.__elementIdToIndex, id)];
+    },
+    tryGetById: function (id) {
+      var index = tryIndexOfById(this.__elementIdToIndex, id);
+      return index >= 0 ? this.__elements[index] : null;
     },
     clear: function () {
       this.__elements = [];

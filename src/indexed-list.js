@@ -18,7 +18,7 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
     function indexOfById(elementIdToIndex, id) {
         var index = tryIndexOfById(elementIdToIndex, id);
         if (index < 0)
-            throw new Error('No entry with Id `' + id + '`.');
+            throw new Error('No element with id `' + id + '`.');
         return index;
     }
 
@@ -68,8 +68,11 @@ define(['onefold-js', 'onefold-lists'], function (js, lists) {
         get: function (index) { return this.__elements[index]; },
 
         getById: function (id) {
-            var index = indexOfById(this.__elementIdToIndex, id);
-            return this.__elements[index];
+            return this.__elements[indexOfById(this.__elementIdToIndex, id)];
+        },
+        tryGetById: function (id) {
+            var index = tryIndexOfById(this.__elementIdToIndex, id);
+            return index >= 0 ? this.__elements[index] : null;
         },
         clear: function () {
             this.__elements = [];
